@@ -50,6 +50,7 @@ public class FloydAlgo<V> {
         int a = graph.getIndex(salida);
         int b = graph.getIndex(llegada);
 
+        
         int shortest = ((Edge<V,Integer>) matriz[a][b]).label();
         System.out.println("Camino mas corto de " + salida + " a " + llegada + ": " + shortest);
 
