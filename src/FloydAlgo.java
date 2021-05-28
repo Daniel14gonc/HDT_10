@@ -1,16 +1,23 @@
 public class FloydAlgo<V> {
     private Object[][] matriz;
     private Integer[][] P;
+    private GraphMatrixDirected<V, Integer> tempGraph;
 
+    public FloydAlgo() {
+        this.matriz = null;
+        P = null;
+        tempGraph = null;
+    }
 
-    public void getShortestPath(String label, GraphMatrixDirected graph){
+    public void getShortestPath(V salida,V llegada, GraphMatrixDirected graph){
         Object[][] temp = graph.getData();
+        tempGraph = graph;
         fillMatrix(temp);
         P = new Integer[temp.length][temp.length];
         for(int k = 0; k<matriz.length; k++){
             for(int i = 0; i<matriz.length;i++){
                 for(int j = 0; j<matriz.length;j++){
-                    if(i!=j && i != k){
+                    if(i!=j){
                         Object a1 = matriz[i][j];
                         Edge<V, Integer> a =(a1!= null)? (Edge<V, Integer>) matriz[i][j] : null;
                         Object b1 = matriz[i][k];
@@ -24,7 +31,7 @@ public class FloydAlgo<V> {
                             if (a != null){
                                 if (a.label() > posibleNuevo){
                                     a.setLabel(posibleNuevo);
-                                    temp[i][j] = k;
+                                    P[i][j] = k;
                                 }
                             }
                             else if(a== null && posibleNuevo!= -1){
@@ -33,15 +40,20 @@ public class FloydAlgo<V> {
                                 graph.addEdge(here, there, posibleNuevo);
                                 Edge<V, Integer> result = graph.getEdge(here, there);
                                 matriz[i][j] = result;
-                                temp[i][j] = k;
+                                P[i][j] = k;
                             }
-
                         }
                     }
                 }
             }
         }
-        stringMatrix();
+        int a = graph.getIndex(salida);
+        int b = graph.getIndex(llegada);
+
+        int shortest = ((Edge<V,Integer>) matriz[a][b]).label();
+        System.out.println("Camino mas corto de " + salida + " a " + llegada + ": " + shortest);
+
+        path(a,b);
     }
 
     public void fillMatrix(Object[][] temp){
@@ -70,8 +82,23 @@ public class FloydAlgo<V> {
         System.out.println(res);
     }
 
-    public void path(Integer q, Integer r){
-
+    public void printS(){
+        String res = "";
+        for(int i = 0; i<P.length;i++) {
+            for (int j = 0; j < P.length; j++) {
+                res += P[i][j] + " ";
+            }
+            res+= "\n";
+        }
+        System.out.println(res);
     }
 
+    public void path(Integer q, Integer r){
+        if(P[q][r] != null){
+            path(q, P[q][r]);
+            System.out.println("Se paso por: " + tempGraph.getByIndex(P[q][r]));
+            path(P[q][r], r);
+        }
+        return;
+    }
 }

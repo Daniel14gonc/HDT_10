@@ -15,7 +15,7 @@ public class GraphMatrixDirectedTest {
         graph.addEdge("Antigua", "Guatemala", 10);
 
         FloydAlgo<String> floyd = new FloydAlgo<String>();
-        floyd.getShortestPath("Antigua", graph);
+        floyd.getShortestPath("Antigua","Guatemala", graph);
 
         /*[][] temp = graph.getData();
         for (int i = 0; i<temp[0].length; i++)

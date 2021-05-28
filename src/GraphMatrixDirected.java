@@ -50,6 +50,10 @@ public class GraphMatrixDirected <V, E> {
         return dict.get(label).label();
     }
 
+    public int getIndex(V label){
+        return dict.get(label).index();
+    }
+
     public Edge<V, E> getEdge(V label1, V label2){
         int row = dict.get(label1).index();
         int column = dict.get(label2).index();
