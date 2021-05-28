@@ -28,6 +28,7 @@ public class main {
 
             FloydAlgo<String> floyd = new FloydAlgo<String>();
             floyd.getShortestPath("Mixco","SantaLucia", graph);
+            floyd.center();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

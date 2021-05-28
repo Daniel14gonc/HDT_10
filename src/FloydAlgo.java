@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class FloydAlgo<V> {
     private Object[][] matriz;
     private Integer[][] P;
@@ -37,8 +40,8 @@ public class FloydAlgo<V> {
                             else if(a== null && posibleNuevo!= -1){
                                 V here = (V) graph.getByIndex(i);
                                 V there = (V) graph.getByIndex(j);
-                                graph.addEdge(here, there, posibleNuevo);
-                                Edge<V, Integer> result = graph.getEdge(here, there);
+                                //graph.addEdge(here, there, posibleNuevo);
+                                Edge<V, Integer> result = new Edge<V, Integer>(here, there, posibleNuevo);
                                 matriz[i][j] = result;
                                 P[i][j] = k;
                             }
@@ -47,10 +50,13 @@ public class FloydAlgo<V> {
                 }
             }
         }
+
+        //stringMatrix();
+
         int a = graph.getIndex(salida);
         int b = graph.getIndex(llegada);
 
-        
+
         int shortest = ((Edge<V,Integer>) matriz[a][b]).label();
         System.out.println("Camino mas corto de " + salida + " a " + llegada + ": " + shortest);
 
@@ -101,5 +107,45 @@ public class FloydAlgo<V> {
             path(P[q][r], r);
         }
         return;
+    }
+
+
+    public void center(){
+        ArrayList<Integer> ecc = new ArrayList<Integer>();
+        for(int i = 0; i<matriz.length; i++){
+            ecc.add(null);
+            int mayor = -1;
+            for(int j = 0; j<matriz.length; j++){
+                Edge<V, Integer> edge = (Edge<V, Integer>) matriz[i][j];
+                if(edge!= null){
+                    int weight = edge.label();
+                    mayor = (weight>mayor) ? weight: mayor;
+                }
+            }
+            if(mayor != -1){
+                ecc.set(i, mayor);
+            }
+        }
+
+
+        int menor = 0;
+        Integer m = ecc.get(0);
+        for(int i = 1; i<ecc.size(); i++){
+            Integer a = ecc.get(i);
+            if(a!=null){
+                if(m == null){
+                    m = a;
+                    menor = i;
+                }
+                else if(a<m){
+                    m = a;
+                    menor = i;
+                }
+            }
+        }
+
+        V label = tempGraph.getByIndex(menor);
+        System.out.println("\nEl centro del grafo es: " + label);
+
     }
 }
