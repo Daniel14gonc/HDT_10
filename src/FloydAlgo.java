@@ -21,7 +21,7 @@ public class FloydAlgo<V> {
         tempGraph = null;
     }
 
-    public void getShortestPath(V salida,V llegada, GraphMatrixDirected graph){
+    public Integer getShortestPath(V salida,V llegada, GraphMatrixDirected graph){
         //Post: Se encuentran los caminos mas cortos entre grafos.
 
         //Se obtiene la matriz de adyacencia del grafo y se guarda una referencia al grafo.
@@ -68,7 +68,16 @@ public class FloydAlgo<V> {
             }
         }
 
+        int a = tempGraph.getIndex(salida);
+        int b = tempGraph.getIndex(llegada);
+        if(a == b)
+            return 0;
 
+        Edge<V,Integer> ed = (Edge<V,Integer>) matriz[a][b];
+        if(ed!= null)
+            return ed.label();
+        else
+            return null;
 
     }
 
