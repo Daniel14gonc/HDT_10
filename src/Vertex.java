@@ -1,42 +1,37 @@
+/*
+ * Nombre: Daniel Gonzalez Carrillo
+ * Carne: 20293
+ * Modificacion: 28/05/2021
+ * Clase: Vertex
+ * Descripcion: Clase que permite la implementacion de un vertice para un grafo.
+ */
+
 public class Vertex <V>{
     protected int index;
     protected V label;
-    protected boolean visited;
 
+    //Constructor
     public Vertex(V label, int index) {
         this.label = label;
-        visited = false;
         this.index = index;
     }
 
 
     public V label() {
+        //Post: Retorna la etiqueta del grafo.
         return label;
     }
 
-    public void visit() {
-        visited = true;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void reset() {
-        visited = true;
-    }
 
     public boolean equals(Object o) {
+        //Post: Determina si el vertice es igual a otro.
         Vertex<V> vertex = (Vertex<V>) o;
         return label.equals(vertex.label());
     }
 
     public int index(){
+        //Post: Retorna el indice del vertice en la matriz de adyacencia.
         return index;
-    }
-
-    public int hashCode(){
-        return label.hashCode();
     }
 
 }

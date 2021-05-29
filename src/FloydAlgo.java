@@ -1,11 +1,20 @@
+/*
+ * Nombre: Daniel Gonzalez Carrillo
+ * Carne: 20293
+ * Modificacion: 28/05/2021
+ * Clase: FloydAlgo
+ * Descripcion: Clase que permite la implementacion del algoritmos de Floyd.
+ */
+
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FloydAlgo<V> {
     private Object[][] matriz;
     private Integer[][] P;
     private GraphMatrixDirected<V, Integer> tempGraph;
 
+    //Constructor
     public FloydAlgo() {
         this.matriz = null;
         P = null;
@@ -13,9 +22,15 @@ public class FloydAlgo<V> {
     }
 
     public void getShortestPath(V salida,V llegada, GraphMatrixDirected graph){
+        //Post: Se encuentran los caminos mas cortos entre grafos.
+
+        //Se obtiene la matriz de adyacencia del grafo y se guarda una referencia al grafo.
         Object[][] temp = graph.getData();
         tempGraph = graph;
+
+        //Se crea una copia de la matriz.
         fillMatrix(temp);
+
         P = new Integer[temp.length][temp.length];
         for(int k = 0; k<matriz.length; k++){
             for(int i = 0; i<matriz.length;i++){
@@ -27,6 +42,8 @@ public class FloydAlgo<V> {
                         Edge<V, Integer> b = (b1!= null)? (Edge<V, Integer>) matriz[i][k]: null;
                         Object c1 = matriz[k][j];
                         Edge<V, Integer> c = (c1!= null)? (Edge<V, Integer>) matriz[k][j] : null;
+
+                        //Se determina la ruta mas corta entre dos grafos.
 
                         int posibleNuevo = -1;
                         if(b != null && c != null) {
@@ -51,19 +68,12 @@ public class FloydAlgo<V> {
             }
         }
 
-        //stringMatrix();
-
-        int a = graph.getIndex(salida);
-        int b = graph.getIndex(llegada);
 
 
-        int shortest = ((Edge<V,Integer>) matriz[a][b]).label();
-        System.out.println("Camino mas corto de " + salida + " a " + llegada + ": " + shortest);
-
-        path(a,b);
     }
 
     public void fillMatrix(Object[][] temp){
+        //Post: Se copia una matriz en otra matriz atributo de clase.
         matriz = new Object[temp.length][temp.length];
         for(int i = 0; i<temp.length;i++){
             for(int j = 0; j<temp.length;j++){
@@ -73,37 +83,12 @@ public class FloydAlgo<V> {
         }
     }
 
-    public void stringMatrix(){
-        String res = "";
-        for(int i = 0; i<matriz.length;i++){
-            for(int j = 0; j<matriz.length;j++){
-                Edge<V, Integer> a = (Edge<V, Integer>) matriz[i][j];
-                if(a != null)
-                    res += a.label() + " ";
-                else
-                    res+= "null ";
-            }
-            res+= "\n";
-        }
-
-        System.out.println(res);
-    }
-
-    public void printS(){
-        String res = "";
-        for(int i = 0; i<P.length;i++) {
-            for (int j = 0; j < P.length; j++) {
-                res += P[i][j] + " ";
-            }
-            res+= "\n";
-        }
-        System.out.println(res);
-    }
 
     public void path(Integer q, Integer r){
+        //Post: Se encuentra recursivamente el camino por el que se reocrre un grafo en su ruta mas corta.
         if(P[q][r] != null){
             path(q, P[q][r]);
-            System.out.println("Se paso por: " + tempGraph.getByIndex(P[q][r]));
+            System.out.println("Se pasa por: " + tempGraph.getByIndex(P[q][r]) + "\n");
             path(P[q][r], r);
         }
         return;
@@ -111,6 +96,9 @@ public class FloydAlgo<V> {
 
 
     public void center(){
+        //Post: Se encuentra el centro del grafo.
+
+        //Se encuentra la ruta mas grande para un grafo.
         ArrayList<Integer> ecc = new ArrayList<Integer>();
         for(int i = 0; i<matriz.length; i++){
             ecc.add(null);
@@ -127,7 +115,7 @@ public class FloydAlgo<V> {
             }
         }
 
-
+        //Se determina el grafo con la ruta mas corta de las mas grandes (eccentricidades del grafo)
         int menor = 0;
         Integer m = ecc.get(0);
         for(int i = 1; i<ecc.size(); i++){
@@ -145,7 +133,33 @@ public class FloydAlgo<V> {
         }
 
         V label = tempGraph.getByIndex(menor);
-        System.out.println("\nEl centro del grafo es: " + label);
+        System.out.println("\nEl centro del grafo es: " + label+ "\n");
+
+    }
+
+    public void shortestPath(V salida, V llegada){
+
+        //Post: Se imprime la distancia de un grafo a otro y se imprimen las ciudades por las que pasa.
+        if(salida.equals(llegada)){
+            System.out.println("La ciudad"+salida+" es la misma. La distancia es de 0 km.");
+        }
+        else{
+
+            int a = tempGraph.getIndex(salida);
+            int b = tempGraph.getIndex(llegada);
+
+            Edge<V,Integer> edge = (Edge<V,Integer>) matriz[a][b];
+            if(edge != null){
+                Integer shortest = edge.label();
+                System.out.println("Camino mas corto de " + salida + " a " + llegada + ": " + shortest + " km\n");
+
+                path(a,b);
+            }
+            else {
+                System.out.println("No existe una forma de llegar de " + salida + " a "+ llegada+"\n");
+            }
+
+        }
 
     }
 }
